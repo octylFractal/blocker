@@ -1,5 +1,6 @@
 package danmw3.games.blocker;
 
+import java.awt.Font;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JFrame;
@@ -23,8 +24,6 @@ public class Blocker {
 	private float pitch = 0.0f;
 
 	private boolean jumping = false;
-
-	public boolean colliding = false;
 
 	private static final float eyeHeight = 2f;
 
@@ -281,6 +280,7 @@ public class Blocker {
 				} catch (InterruptedException is) {
 				}
 			}
+			
 		}
 		try {
 			Display.releaseContext();
@@ -314,6 +314,7 @@ public class Blocker {
 			}
 			GL11.glTranslatef(2f, -(yBlocks * 2), 0);
 		}
+		
 	}
 
 	public void RenderCube() {
@@ -356,7 +357,7 @@ public class Blocker {
 		GL11.glVertex3f(1.0f, -1.0f, -1.0f);
 		GL11.glEnd();
 	}
-
+	
 	public static void main(String[] args) {
 		Blocker app = new Blocker();
 		JFrame mainMenu = new FrameTesting("Secret Title", 0, 275, 475);
