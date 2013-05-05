@@ -205,7 +205,7 @@ public class Blocker {
 
 			dy = Mouse.getDY();
 
-			camera.yaw(dx * mouseSensitivity);
+			camera.yaw(dx * -mouseSensitivity);
 
 			camera.pitch(dy * -mouseSensitivity);
 
@@ -365,7 +365,7 @@ public class Blocker {
 	}
 	
 	public static void init(){
-		Font awtFont = new Font("Times New Roman", Font.BOLD, 5);
+		Font awtFont = new Font("Times New Roman", Font.PLAIN, 2);
 		font = new TrueTypeFont(awtFont, false);
 	}
 	
