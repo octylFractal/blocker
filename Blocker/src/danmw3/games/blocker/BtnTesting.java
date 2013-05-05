@@ -13,7 +13,7 @@ public class BtnTesting extends JButton implements ActionListener {
 
 	FrameTesting frameTesting;
 	Blocker app;
-	
+
 	String[] cmds = { "exit" };
 
 	public BtnTesting(String text, int sizeX, int sizeY, int locX, int locY) {
@@ -41,19 +41,19 @@ public class BtnTesting extends JButton implements ActionListener {
 					append("Closing Game");
 					Display.destroy();
 					System.exit(0);
-				}else{
+				} else {
 					System.out.println("fsdbggb");
 				}
 			}
 		}
 	}
-	
+
 	public void append(String s) {
-		   try {
-		      Document doc = FrameTesting.consoleOutput.getDocument();
-		      doc.insertString(doc.getLength(), s + "\n", null);
-		   } catch(BadLocationException exc) {
-		      exc.printStackTrace();
-		   }
+		try {
+			Document doc = FrameTesting.consoleOutput.getDocument();
+			doc.insertString(doc.getLength(), s + "\n", null);
+		} catch (BadLocationException exc) {
+			exc.printStackTrace();
 		}
+	}
 }

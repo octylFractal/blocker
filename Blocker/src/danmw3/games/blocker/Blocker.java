@@ -23,7 +23,7 @@ public class Blocker {
 	private float pitch = 0.0f;
 
 	private boolean jumping = false;
-	
+
 	public boolean colliding = false;
 
 	private static final float eyeHeight = 2f;
@@ -315,45 +315,45 @@ public class Blocker {
 			GL11.glTranslatef(2f, -(yBlocks * 2), 0);
 		}
 	}
-	
+
 	public void RenderCube() {
 		// GL11.glBegin(GL11.GL_LINE_LOOP);
 		GL11.glBegin(GL11.GL_QUADS);
-			GL11.glColor3f(0.0f, 1.0f, 0.0f);
-			GL11.glVertex3f(1.0f, 1.0f, -1.0f);
-			GL11.glVertex3f(-1.0f, 1.0f, -1.0f);
-			GL11.glVertex3f(-1.0f, 1.0f, 1.0f);
-			GL11.glVertex3f(1.0f, 1.0f, 1.0f);
-			
-			GL11.glColor3f(1.0f, 0.5f, 0.0f);
-			GL11.glVertex3f(1.0f, -1.0f, 1.0f);
-			GL11.glVertex3f(-1.0f, -1.0f, 1.0f);
-			GL11.glVertex3f(-1.0f, -1.0f, -1.0f);
-			GL11.glVertex3f(1.0f, -1.0f, -1.0f);
-			
-			GL11.glColor3f(1.0f, 0.0f, 0.0f);
-			GL11.glVertex3f(1.0f, 1.0f, 1.0f);
-			GL11.glVertex3f(-1.0f, 1.0f, 1.0f);
-			GL11.glVertex3f(-1.0f, -1.0f, 1.0f);
-			GL11.glVertex3f(1.0f, -1.0f, 1.0f);
-			
-			GL11.glColor3f(1.0f, 1.0f, 0.0f);
-			GL11.glVertex3f(1.0f, -1.0f, -1.0f);
-			GL11.glVertex3f(-1.0f, -1.0f, -1.0f);
-			GL11.glVertex3f(-1.0f, 1.0f, -1.0f);
-			GL11.glVertex3f(1.0f, 1.0f, -1.0f);
-			
-			GL11.glColor3f(0.0f, 0.0f, 1.0f);
-			GL11.glVertex3f(-1.0f, 1.0f, 1.0f);
-			GL11.glVertex3f(-1.0f, 1.0f, -1.0f);
-			GL11.glVertex3f(-1.0f, -1.0f, -1.0f);
-			GL11.glVertex3f(-1.0f, -1.0f, 1.0f);
-			
-			GL11.glColor3f(1.0f, 0.0f, 1.0f);
-			GL11.glVertex3f(1.0f, 1.0f, -1.0f);
-			GL11.glVertex3f(1.0f, 1.0f, 1.0f);
-			GL11.glVertex3f(1.0f, -1.0f, 1.0f);
-			GL11.glVertex3f(1.0f, -1.0f, -1.0f);
+		GL11.glColor3f(0.0f, 1.0f, 0.0f);
+		GL11.glVertex3f(1.0f, 1.0f, -1.0f);
+		GL11.glVertex3f(-1.0f, 1.0f, -1.0f);
+		GL11.glVertex3f(-1.0f, 1.0f, 1.0f);
+		GL11.glVertex3f(1.0f, 1.0f, 1.0f);
+
+		GL11.glColor3f(1.0f, 0.5f, 0.0f);
+		GL11.glVertex3f(1.0f, -1.0f, 1.0f);
+		GL11.glVertex3f(-1.0f, -1.0f, 1.0f);
+		GL11.glVertex3f(-1.0f, -1.0f, -1.0f);
+		GL11.glVertex3f(1.0f, -1.0f, -1.0f);
+
+		GL11.glColor3f(1.0f, 0.0f, 0.0f);
+		GL11.glVertex3f(1.0f, 1.0f, 1.0f);
+		GL11.glVertex3f(-1.0f, 1.0f, 1.0f);
+		GL11.glVertex3f(-1.0f, -1.0f, 1.0f);
+		GL11.glVertex3f(1.0f, -1.0f, 1.0f);
+
+		GL11.glColor3f(1.0f, 1.0f, 0.0f);
+		GL11.glVertex3f(1.0f, -1.0f, -1.0f);
+		GL11.glVertex3f(-1.0f, -1.0f, -1.0f);
+		GL11.glVertex3f(-1.0f, 1.0f, -1.0f);
+		GL11.glVertex3f(1.0f, 1.0f, -1.0f);
+
+		GL11.glColor3f(0.0f, 0.0f, 1.0f);
+		GL11.glVertex3f(-1.0f, 1.0f, 1.0f);
+		GL11.glVertex3f(-1.0f, 1.0f, -1.0f);
+		GL11.glVertex3f(-1.0f, -1.0f, -1.0f);
+		GL11.glVertex3f(-1.0f, -1.0f, 1.0f);
+
+		GL11.glColor3f(1.0f, 0.0f, 1.0f);
+		GL11.glVertex3f(1.0f, 1.0f, -1.0f);
+		GL11.glVertex3f(1.0f, 1.0f, 1.0f);
+		GL11.glVertex3f(1.0f, -1.0f, 1.0f);
+		GL11.glVertex3f(1.0f, -1.0f, -1.0f);
 		GL11.glEnd();
 	}
 
@@ -365,5 +365,4 @@ public class Blocker {
 		// app.run();
 
 	}
-
 }
