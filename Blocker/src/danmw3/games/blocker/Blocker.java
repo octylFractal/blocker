@@ -1,6 +1,5 @@
 package danmw3.games.blocker;
 
-import java.awt.Font;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JFrame;
