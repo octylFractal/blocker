@@ -1,6 +1,9 @@
 package danmw3.games.blocker;
 
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -13,6 +16,8 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
+import org.newdawn.slick.TrueTypeFont;
+import org.newdawn.slick.Color;
 
 public class Blocker {
 
@@ -26,6 +31,8 @@ public class Blocker {
 
 	private static final float eyeHeight = 2f;
 
+	static TrueTypeFont font;
+	
 	public Blocker(float x, float y, float z) {
 		position = new Vector3f(x, y, z);
 	}
@@ -81,7 +88,6 @@ public class Blocker {
 	private float zrot = 0.1f;
 
 	public static void initDisplay(boolean fullscreen) {
-
 		DisplayMode chosenMode = null;
 
 		try {
@@ -161,7 +167,7 @@ public class Blocker {
 		return org.lwjgl.input.Keyboard.isKeyDown(keyCode);
 	}
 
-	public void run() {
+	public void run() throws FontFormatException, IOException {
 		Blocker camera = new Blocker(0, eyeHeight, 0);
 
 		float dx = 0.0f;
@@ -297,6 +303,7 @@ public class Blocker {
 
 	private void render() {
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+		font.drawString(10, 10, "HELLO", Color.yellow);
 		GL11.glTranslatef(-1f, 0.0f, -70f);
 
 		int xBlocks = 10;
@@ -355,6 +362,11 @@ public class Blocker {
 		GL11.glVertex3f(1.0f, -1.0f, 1.0f);
 		GL11.glVertex3f(1.0f, -1.0f, -1.0f);
 		GL11.glEnd();
+	}
+	
+	public static void init(){
+		Font awtFont = new Font("Times New Roman", Font.BOLD, 5);
+		font = new TrueTypeFont(awtFont, false);
 	}
 	
 	public static void main(String[] args) {

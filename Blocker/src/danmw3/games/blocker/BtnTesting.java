@@ -1,7 +1,9 @@
 package danmw3.games.blocker;
 
+import java.awt.FontFormatException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.text.BadLocationException;
@@ -30,7 +32,16 @@ public class BtnTesting extends JButton implements ActionListener {
 			Blocker app = new Blocker();
 			Blocker.initDisplay(false);
 			Blocker.initGL();
-			app.run();
+			Blocker.init();
+			try {
+				app.run();
+			} catch (FontFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else if (btn.equals("Exit Game")) {
 			Display.destroy();
 			System.exit(0);
