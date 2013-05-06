@@ -387,19 +387,14 @@ public class Blocker {
 	}
 	
 	public void start() {
-	    //some startup code
-	    lastFPS = getTime(); //set lastFPS to current Time
+	    lastFPS = getTime();
 	}
-
-
-	/**
-	 * Calculate the FPS and set it in the title bar
-	 */
+	
 	public void updateFPS() {
 	    if (getTime() - lastFPS > 1000) {
 	        Display.setTitle("Blocker | FPS: " + fps); 
-	        fps = 0; //reset the FPS counter
-	        lastFPS += 1000; //add one second
+	        fps = 0;
+	        lastFPS += 1000;
 	    }
 	    fps++;
 	}
@@ -408,8 +403,5 @@ public class Blocker {
 		Blocker app = new Blocker();
 		JFrame mainMenu = new FrameTesting("Secret Title", 0, 275, 475);
 		JFrame console = new FrameTesting("Console", 1, 600, 475);
-		// initDisplay(false);
-		// app.run();
-
 	}
 }
