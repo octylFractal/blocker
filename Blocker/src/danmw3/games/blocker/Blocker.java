@@ -79,7 +79,8 @@ public class Blocker {
 
 		GL11.glRotatef(yaw, 0.0f, 1.0f, 0.0f);
 
-		GL11.glTranslatef(position.x, position.y, position.z);
+		//Invert psotion.y to a negative  to fix the coordinate system   (0,0) now starts at top left  :)
+		GL11.glTranslatef(position.x, -position.y, position.z);
 	}
 
 	private static boolean gameRunning = true;
@@ -256,11 +257,11 @@ public class Blocker {
 			}
 
 			/* Commenting out because spam */
-			/*
-			 * System.out.println("X: " + Math.round(camera.position.x) + " Y: "
-			 * + Math.round(-camera.position.y) + " Z: " +
-			 * Math.round(camera.position.z));
-			 */
+			
+			 System.out.println("X: " + Math.round(camera.position.x) + " Y: "
+			 + Math.round(camera.position.y) + " Z: " +
+			 Math.round(camera.position.z));
+			 
 			// Moved render code, to help with flicker when jumping
 			render();
 			GL11.glLoadIdentity();
