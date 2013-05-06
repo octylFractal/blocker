@@ -30,8 +30,8 @@ public class Blocker {
 
 	private boolean jumping = false;
 
-	private static final float eyeHeight = -2f;
-	
+	private static final float eyeHeight = 2f;
+
 	static long lastFrame = 0;
 	static long lastFPS = 0;
 	int fps = 0;
@@ -79,7 +79,8 @@ public class Blocker {
 
 		GL11.glRotatef(yaw, 0.0f, 1.0f, 0.0f);
 
-		//Invert psotion.y to a negative  to fix the coordinate system   (0,0) now starts at top left  :)
+		// Invert psotion.y to a negative to fix the coordinate system (0,0) now
+		// starts at top left :)
 		GL11.glTranslatef(position.x, -position.y, position.z);
 	}
 
@@ -98,8 +99,7 @@ public class Blocker {
 			DisplayMode[] modes = Display.getAvailableDisplayModes();
 
 			for (int i = 0; i < modes.length; i++) {
-				if ((modes[i].getWidth() == targetWidth)
-						&& (modes[i].getHeight() == targetHeight)) {
+				if ((modes[i].getWidth() == targetWidth) && (modes[i].getHeight() == targetHeight)) {
 					chosenMode = modes[i];
 					break;
 				}
@@ -132,8 +132,7 @@ public class Blocker {
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
 
-		GLU.gluPerspective(45.0f, ((float) targetWidth)
-				/ ((float) targetHeight), 0.1f, 100.0f);
+		GLU.gluPerspective(45.0f, ((float) targetWidth) / ((float) targetHeight), 0.1f, 100.0f);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glLoadIdentity();
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
@@ -170,7 +169,7 @@ public class Blocker {
 
 		return org.lwjgl.input.Keyboard.isKeyDown(keyCode);
 	}
-	
+
 	public void run() throws FontFormatException, IOException {
 		Blocker camera = new Blocker(0, eyeHeight, 0);
 
@@ -244,24 +243,21 @@ public class Blocker {
 				// Real-life physics yo
 				float float_sec = (time - timeJumpStart) / physicsSpeed;
 				if (float_sec != 0) {
-					float newPosY = ((1f / 2f * gravity * float_sec * float_sec)
-							- (motionY * float_sec) - (camera.position.y));
-					if (newPosY >= -eyeHeight) {
+					float newPosY = ((1f / 2f * gravity * float_sec * float_sec) - (motionY * float_sec) - (-camera.position.y));
+					if (newPosY >= eyeHeight) {
 						jumping = false;
 						timeJumpStart = 0;
-						newPosY = eyeHeight;
+						newPosY = -eyeHeight;
 					}
-					camera.position.y = newPosY;
+					camera.position.y = -newPosY;
 
 				}
 			}
 
 			/* Commenting out because spam */
-			
-			 System.out.println("X: " + Math.round(camera.position.x) + " Y: "
-			 + Math.round(camera.position.y) + " Z: " +
-			 Math.round(camera.position.z));
-			 
+
+			System.out.println("X: " + Math.round(camera.position.x) + " Y: " + Math.round(camera.position.y) + " Z: " + Math.round(camera.position.z));
+
 			// Moved render code, to help with flicker when jumping
 			render();
 			GL11.glLoadIdentity();
@@ -275,10 +271,7 @@ public class Blocker {
 			}
 			if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
 				Mouse.setGrabbed(false);
-				int result = JOptionPane.showConfirmDialog(null,
-						"Are you sure you want to quit?", "Close",
-						JOptionPane.OK_CANCEL_OPTION,
-						JOptionPane.QUESTION_MESSAGE);
+				int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to quit?", "Close", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 				if (result == JOptionPane.OK_OPTION) {
 					gameRunning = false;
 					continue;
@@ -303,7 +296,7 @@ public class Blocker {
 		xrot += 0.1f;
 		yrot += 0.1f;
 		zrot += 0.1f;
-		
+
 		updateFPS();
 	}
 
@@ -315,7 +308,7 @@ public class Blocker {
 		dt = (time - lastTime);
 		lastTime = time;
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-		
+
 		GL11.glTranslatef(-1f, 0.0f, -70f);
 		int xBlocks = 10;
 		int yBlocks = 1;
@@ -374,32 +367,32 @@ public class Blocker {
 		GL11.glVertex3f(1.0f, -1.0f, -1.0f);
 		GL11.glEnd();
 	}
-	
+
 	public static long getTime() {
-	    return System.nanoTime() / 1000000;
+		return System.nanoTime() / 1000000;
 	}
-	
+
 	public static int getDelta() {
-	    long time = getTime();
-	    int delta = (int) (time - lastFrame);
-	    lastFrame = time;
-	    	
-	    return delta;
+		long time = getTime();
+		int delta = (int) (time - lastFrame);
+		lastFrame = time;
+
+		return delta;
 	}
-	
+
 	public void start() {
-	    lastFPS = getTime();
+		lastFPS = getTime();
 	}
-	
+
 	public void updateFPS() {
-	    if (getTime() - lastFPS > 1000) {
-	        Display.setTitle("Blocker | FPS: " + fps); 
-	        fps = 0;
-	        lastFPS += 1000;
-	    }
-	    fps++;
+		if (getTime() - lastFPS > 1000) {
+			Display.setTitle("Blocker | FPS: " + fps);
+			fps = 0;
+			lastFPS += 1000;
+		}
+		fps++;
 	}
-	
+
 	public static void main(String[] args) {
 		Blocker app = new Blocker();
 		JFrame mainMenu = new FrameTesting("Secret Title", 0, 275, 475);
