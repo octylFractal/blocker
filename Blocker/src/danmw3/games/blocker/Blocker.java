@@ -29,7 +29,7 @@ public class Blocker {
 
 	private boolean jumping = false;
 
-	private static final float eyeHeight = 2f;
+	private static final float eyeHeight = -2f;
 
 	static TrueTypeFont font;
 	
@@ -74,7 +74,7 @@ public class Blocker {
 	public void lookThrough() {
 		GL11.glRotatef(pitch, 1.0f, 0.0f, 0.0f);
 
-		GL11.glRotatef(yaw, 0.0f, -1.0f, 0.0f);
+		GL11.glRotatef(yaw, 0.0f, 1.0f, 0.0f);
 
 		GL11.glTranslatef(position.x, position.y, position.z);
 	}
@@ -205,7 +205,7 @@ public class Blocker {
 
 			dy = Mouse.getDY();
 
-			camera.yaw(dx * -mouseSensitivity);
+			camera.yaw(dx * mouseSensitivity);
 
 			camera.pitch(dy * -mouseSensitivity);
 
@@ -242,7 +242,7 @@ public class Blocker {
 				if (float_sec != 0) {
 					float newPosY = ((1f / 2f * gravity * float_sec * float_sec)
 							- (motionY * float_sec) - (camera.position.y));
-					if (newPosY >= eyeHeight) {
+					if (newPosY >= -eyeHeight) {
 						jumping = false;
 						timeJumpStart = 0;
 						newPosY = eyeHeight;
@@ -302,8 +302,9 @@ public class Blocker {
 	}
 
 	private void render() {
-		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 		font.drawString(10, 10, "HELLO", Color.yellow);
+		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+		
 		GL11.glTranslatef(-1f, 0.0f, -70f);
 
 		int xBlocks = 10;
