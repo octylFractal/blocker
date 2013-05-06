@@ -251,7 +251,7 @@ public class Blocker {
 
 				}
 			}
-
+			
 			/* Commenting out because spam */
 			/*
 			 * System.out.println("X: " + Math.round(camera.position.x) + " Y: "
