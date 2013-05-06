@@ -24,7 +24,7 @@ public class BtnTesting extends JButton implements ActionListener {
 		setSize(sizeX, sizeY); // 120 40
 		setLocation(locX, locY); // 50 50
 	}
-
+	
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		String btn = event.getActionCommand();
