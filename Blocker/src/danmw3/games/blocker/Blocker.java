@@ -18,6 +18,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.opengl.TextureImpl;
 
 public class Blocker {
 
@@ -30,8 +31,10 @@ public class Blocker {
 	private boolean jumping = false;
 
 	private static final float eyeHeight = -2f;
-
-	static TrueTypeFont font;
+	
+	static long lastFrame = 0;
+	static long lastFPS = 0;
+	int fps = 0;
 
 	public Blocker(float x, float y, float z) {
 		position = new Vector3f(x, y, z);
@@ -120,7 +123,8 @@ public class Blocker {
 			Sys.alert("Error", "Unable to create display.");
 			System.exit(0);
 		}
-
+		getDelta();
+		lastFPS = getTime();
 	}
 
 	public static boolean initGL() {
@@ -131,7 +135,6 @@ public class Blocker {
 				/ ((float) targetHeight), 0.1f, 100.0f);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glLoadIdentity();
-
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glShadeModel(GL11.GL_SMOOTH);
 		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -166,7 +169,7 @@ public class Blocker {
 
 		return org.lwjgl.input.Keyboard.isKeyDown(keyCode);
 	}
-
+	
 	public void run() throws FontFormatException, IOException {
 		Blocker camera = new Blocker(0, eyeHeight, 0);
 
@@ -299,14 +302,20 @@ public class Blocker {
 		xrot += 0.1f;
 		yrot += 0.1f;
 		zrot += 0.1f;
+		
+		updateFPS();
 	}
 
 	private void render() {
-		font.drawString(10, 10, "HELLO", Color.yellow);
+		long dt = 0;
+		long lastTime = 0;
+		long time = 0;
+		time = (Sys.getTime() * 1000) / Sys.getTimerResolution();
+		dt = (time - lastTime);
+		lastTime = time;
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-
+		
 		GL11.glTranslatef(-1f, 0.0f, -70f);
-
 		int xBlocks = 10;
 		int yBlocks = 1;
 		int zBlocks = 10;
@@ -364,12 +373,37 @@ public class Blocker {
 		GL11.glVertex3f(1.0f, -1.0f, -1.0f);
 		GL11.glEnd();
 	}
-
-	public static void init() {
-		Font awtFont = new Font("Times New Roman", Font.PLAIN, 10);
-		font = new TrueTypeFont(awtFont, false);
+	
+	public static long getTime() {
+	    return System.nanoTime() / 1000000;
+	}
+	
+	public static int getDelta() {
+	    long time = getTime();
+	    int delta = (int) (time - lastFrame);
+	    lastFrame = time;
+	    	
+	    return delta;
+	}
+	
+	public void start() {
+	    //some startup code
+	    lastFPS = getTime(); //set lastFPS to current Time
 	}
 
+
+	/**
+	 * Calculate the FPS and set it in the title bar
+	 */
+	public void updateFPS() {
+	    if (getTime() - lastFPS > 1000) {
+	        Display.setTitle("Blocker | FPS: " + fps); 
+	        fps = 0; //reset the FPS counter
+	        lastFPS += 1000; //add one second
+	    }
+	    fps++;
+	}
+	
 	public static void main(String[] args) {
 		Blocker app = new Blocker();
 		JFrame mainMenu = new FrameTesting("Secret Title", 0, 275, 475);

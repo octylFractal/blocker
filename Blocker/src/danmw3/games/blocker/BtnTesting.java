@@ -32,7 +32,6 @@ public class BtnTesting extends JButton implements ActionListener {
 			Blocker app = new Blocker();
 			Blocker.initDisplay(false);
 			Blocker.initGL();
-			Blocker.init();
 			try {
 				app.run();
 			} catch (FontFormatException e) {
