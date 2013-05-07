@@ -1,9 +1,9 @@
 package danmw3.games.blocker;
 
-import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -16,9 +16,6 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
-import org.newdawn.slick.TrueTypeFont;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.opengl.TextureImpl;
 
 public class Blocker {
 
@@ -31,6 +28,8 @@ public class Blocker {
 	private boolean jumping = false;
 
 	private static final float eyeHeight = 2f;
+	
+	private WorldGenerator worldGen;
 
 	static long lastFrame = 0;
 	static long lastFPS = 0;
@@ -299,7 +298,7 @@ public class Blocker {
 
 		updateFPS();
 	}
-
+	
 	private void render() {
 		long dt = 0;
 		long lastTime = 0;
@@ -310,62 +309,9 @@ public class Blocker {
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
 		GL11.glTranslatef(-1f, 0.0f, -70f);
-		int xBlocks = 10;
-		int yBlocks = 1;
-		int zBlocks = 10;
-
-		for (int x = 0; x < xBlocks; x++) {
-			for (int y = 0; y < yBlocks; y++) {
-				for (int z = 0; z < zBlocks; z++) {
-					RenderCube();
-					GL11.glTranslatef(0f, 0f, 2f);
-				}
-				GL11.glTranslatef(0f, 2f, -(zBlocks * 2));
-			}
-			GL11.glTranslatef(2f, -(yBlocks * 2), 0);
-		}
-
-	}
-
-	public void RenderCube() {
-		// GL11.glBegin(GL11.GL_LINE_LOOP);
-		GL11.glBegin(GL11.GL_QUADS);
-		GL11.glColor3f(0.0f, 1.0f, 0.0f);
-		GL11.glVertex3f(1.0f, 1.0f, -1.0f);
-		GL11.glVertex3f(-1.0f, 1.0f, -1.0f);
-		GL11.glVertex3f(-1.0f, 1.0f, 1.0f);
-		GL11.glVertex3f(1.0f, 1.0f, 1.0f);
-
-		GL11.glColor3f(1.0f, 0.5f, 0.0f);
-		GL11.glVertex3f(1.0f, -1.0f, 1.0f);
-		GL11.glVertex3f(-1.0f, -1.0f, 1.0f);
-		GL11.glVertex3f(-1.0f, -1.0f, -1.0f);
-		GL11.glVertex3f(1.0f, -1.0f, -1.0f);
-
-		GL11.glColor3f(1.0f, 0.0f, 0.0f);
-		GL11.glVertex3f(1.0f, 1.0f, 1.0f);
-		GL11.glVertex3f(-1.0f, 1.0f, 1.0f);
-		GL11.glVertex3f(-1.0f, -1.0f, 1.0f);
-		GL11.glVertex3f(1.0f, -1.0f, 1.0f);
-
-		GL11.glColor3f(1.0f, 1.0f, 0.0f);
-		GL11.glVertex3f(1.0f, -1.0f, -1.0f);
-		GL11.glVertex3f(-1.0f, -1.0f, -1.0f);
-		GL11.glVertex3f(-1.0f, 1.0f, -1.0f);
-		GL11.glVertex3f(1.0f, 1.0f, -1.0f);
-
-		GL11.glColor3f(0.0f, 0.0f, 1.0f);
-		GL11.glVertex3f(-1.0f, 1.0f, 1.0f);
-		GL11.glVertex3f(-1.0f, 1.0f, -1.0f);
-		GL11.glVertex3f(-1.0f, -1.0f, -1.0f);
-		GL11.glVertex3f(-1.0f, -1.0f, 1.0f);
-
-		GL11.glColor3f(1.0f, 0.0f, 1.0f);
-		GL11.glVertex3f(1.0f, 1.0f, -1.0f);
-		GL11.glVertex3f(1.0f, 1.0f, 1.0f);
-		GL11.glVertex3f(1.0f, -1.0f, 1.0f);
-		GL11.glVertex3f(1.0f, -1.0f, -1.0f);
-		GL11.glEnd();
+		
+		worldGen = new WorldGenerator(5);
+		worldGen.generateTerrain();
 	}
 
 	public static long getTime() {
@@ -392,7 +338,7 @@ public class Blocker {
 		}
 		fps++;
 	}
-
+	
 	public static void main(String[] args) {
 		Blocker app = new Blocker();
 		JFrame mainMenu = new FrameTesting("Secret Title", 0, 275, 475);
