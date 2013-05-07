@@ -3,9 +3,6 @@ package danmw3.games.blocker;
 import java.awt.FontFormatException;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.util.Random;
-
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import org.lwjgl.LWJGLException;
@@ -34,6 +31,10 @@ public class Blocker {
 	static long lastFrame = 0;
 	static long lastFPS = 0;
 	int fps = 0;
+
+	// Longs because of timer accuracy
+	long dt = 0;
+	long time = 0;
 
 	public Blocker(float x, float y, float z) {
 		position = new Vector3f(x, y, z);
@@ -87,10 +88,6 @@ public class Blocker {
 	private static int targetWidth = 800;
 	private static int targetHeight = 600;
 
-	private float xrot = 0.1f;
-	private float yrot = 0.1f;
-	private float zrot = 0.1f;
-
 	public static void initDisplay(boolean fullscreen) {
 		DisplayMode chosenMode = null;
 
@@ -98,7 +95,8 @@ public class Blocker {
 			DisplayMode[] modes = Display.getAvailableDisplayModes();
 
 			for (int i = 0; i < modes.length; i++) {
-				if ((modes[i].getWidth() == targetWidth) && (modes[i].getHeight() == targetHeight)) {
+				if ((modes[i].getWidth() == targetWidth)
+						&& (modes[i].getHeight() == targetHeight)) {
 					chosenMode = modes[i];
 					break;
 				}
@@ -123,15 +121,14 @@ public class Blocker {
 			Sys.alert("Error", "Unable to create display.");
 			System.exit(0);
 		}
-		getDelta();
-		lastFPS = getTime();
 	}
 
 	public static boolean initGL() {
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
 
-		GLU.gluPerspective(45.0f, ((float) targetWidth) / ((float) targetHeight), 0.1f, 100.0f);
+		GLU.gluPerspective(45.0f, ((float) targetWidth)
+				/ ((float) targetHeight), 0.1f, 100.0f);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glLoadIdentity();
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
@@ -175,20 +172,16 @@ public class Blocker {
 		float dx = 0.0f;
 		float dy = 0.0f;
 
-		float motionX = 0.0f;
+		// float motionX = 0.0f;
 		float motionY = 0.0f;
-		float motionZ = 0.0f;
+		// float motionZ = 0.0f;
 		float gravity = 9.8f; // WE BE LIVIN' ON EARTH
 		long timeJumpStart = 0L;
-		// Longs because of timer accuracy
-		long dt = 0;
-		long lastTime = 0;
-		long time = 0;
-
 		float mouseSensitivity = 0.05f;
 		float movementSpeed = 5.0f;
 		float physicsSpeed = 300f;
 		Mouse.setGrabbed(true);
+		beginFPSCount();
 		gameRunning = true;
 		while (gameRunning) {
 			update();
@@ -197,10 +190,9 @@ public class Blocker {
 			Display.sync(120);
 			Display.processMessages();
 
-			// Re-did the timing system
-			time = (Sys.getTime() * 1000) / Sys.getTimerResolution();
-			dt = (time - lastTime);
-			lastTime = time;
+			// Re-did the timing system //again
+			time = getTime();
+			dt = getDelta();
 
 			Mouse.poll();
 			dx = Mouse.getDX();
@@ -232,7 +224,7 @@ public class Blocker {
 
 			// only jump once, unless you want weird flight
 			if (Keyboard.isKeyDown(Keyboard.KEY_SPACE) && !jumping) {
-				motionY = 15;
+				motionY = 10;
 				timeJumpStart = time;
 				jumping = true;
 			}
@@ -242,20 +234,22 @@ public class Blocker {
 				// Real-life physics yo
 				float float_sec = (time - timeJumpStart) / physicsSpeed;
 				if (float_sec != 0) {
-					float newPosY = ((1f / 2f * gravity * float_sec * float_sec) - (motionY * float_sec) - (-camera.position.y));
-					if (newPosY >= eyeHeight) {
+					float newPosY = ((-1f / 2f * gravity * float_sec * float_sec)
+							+ (motionY * float_sec) + (camera.position.y));
+					if (newPosY <= eyeHeight) {
 						jumping = false;
 						timeJumpStart = 0;
-						newPosY = -eyeHeight;
+						newPosY = eyeHeight;
 					}
-					camera.position.y = -newPosY;
-
+					camera.position.y = newPosY;
 				}
 			}
 
 			/* Commenting out because spam */
 
-			System.out.println("X: " + Math.round(camera.position.x) + " Y: " + Math.round(camera.position.y) + " Z: " + Math.round(camera.position.z));
+			System.out.println("X: " + Math.round(camera.position.x) + " Y: "
+					+ Math.round(camera.position.y) + " Z: "
+					+ Math.round(camera.position.z));
 
 			// Moved render code, to help with flicker when jumping
 			render();
@@ -270,7 +264,10 @@ public class Blocker {
 			}
 			if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
 				Mouse.setGrabbed(false);
-				int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to quit?", "Close", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+				int result = JOptionPane.showConfirmDialog(null,
+						"Are you sure you want to quit?", "Close",
+						JOptionPane.OK_CANCEL_OPTION,
+						JOptionPane.QUESTION_MESSAGE);
 				if (result == JOptionPane.OK_OPTION) {
 					gameRunning = false;
 					continue;
@@ -288,34 +285,27 @@ public class Blocker {
 			Display.destroy();
 		} catch (LWJGLException e) {
 			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 
 	private void update() {
-		xrot += 0.1f;
-		yrot += 0.1f;
-		zrot += 0.1f;
-
 		updateFPS();
 	}
 
 	private void render() {
-		long dt = 0;
-		long lastTime = 0;
-		long time = 0;
-		time = (Sys.getTime() * 1000) / Sys.getTimerResolution();
-		dt = (time - lastTime);
-		lastTime = time;
+		GL11.glPushMatrix();
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
 		GL11.glTranslatef(-1f, 0.0f, -70f);
 
 		worldGen = new WorldGenerator(5);
 		worldGen.generateTerrain();
+		GL11.glPopMatrix();
 	}
 
 	public static long getTime() {
-		return System.nanoTime() / 1000000;
+		return Sys.getTime() * 1000 / Sys.getTimerResolution();
 	}
 
 	public static int getDelta() {
@@ -326,7 +316,8 @@ public class Blocker {
 		return delta;
 	}
 
-	public void start() {
+	public void beginFPSCount() {
+		getDelta();
 		lastFPS = getTime();
 	}
 
@@ -340,8 +331,7 @@ public class Blocker {
 	}
 
 	public static void main(String[] args) {
-		Blocker app = new Blocker();
-		JFrame mainMenu = new FrameTesting("Secret Title", 0, 275, 475);
-		JFrame console = new FrameTesting("Console", 1, 600, 475);
+		/* JFrame mainMenu = */new FrameTesting("Secret Title", 0, 275, 475);
+		/* JFrame console = */new FrameTesting("Console", 1, 600, 475);
 	}
 }
