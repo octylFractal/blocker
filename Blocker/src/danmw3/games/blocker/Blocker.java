@@ -28,7 +28,7 @@ public class Blocker {
 	private boolean jumping = false;
 
 	private static final float eyeHeight = 2f;
-	
+
 	private WorldGenerator worldGen;
 
 	static long lastFrame = 0;
@@ -298,7 +298,7 @@ public class Blocker {
 
 		updateFPS();
 	}
-	
+
 	private void render() {
 		long dt = 0;
 		long lastTime = 0;
@@ -309,7 +309,7 @@ public class Blocker {
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
 		GL11.glTranslatef(-1f, 0.0f, -70f);
-		
+
 		worldGen = new WorldGenerator(5);
 		worldGen.generateTerrain();
 	}
@@ -338,7 +338,7 @@ public class Blocker {
 		}
 		fps++;
 	}
-	
+
 	public static void main(String[] args) {
 		Blocker app = new Blocker();
 		JFrame mainMenu = new FrameTesting("Secret Title", 0, 275, 475);
