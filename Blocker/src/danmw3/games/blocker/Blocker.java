@@ -39,7 +39,7 @@ public class Blocker {
 	public Blocker(float x, float y, float z) {
 		position = new Vector3f(x, y, z);
 	}
-
+	
 	public Blocker() {
 
 	}
