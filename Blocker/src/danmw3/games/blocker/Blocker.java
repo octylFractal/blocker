@@ -224,7 +224,7 @@ public class Blocker {
 
 			// only jump once, unless you want weird flight
 			if (Keyboard.isKeyDown(Keyboard.KEY_SPACE) && !jumping) {
-				motionY = 10;
+				motionY = 8;
 				timeJumpStart = time;
 				jumping = true;
 			}
