@@ -167,8 +167,6 @@ public class Blocker {
 	public void run() throws FontFormatException, IOException {
 		Blocker camera = new Blocker(0, eyeHeight, 0);
 		
-		startTimerHackThread();
-
 		float dx = 0.0f;
 		float dy = 0.0f;
 
@@ -230,20 +228,19 @@ public class Blocker {
 			}
 
 			// It'll kill it in the first sec. otherwise
-						if (jumping && time != timeJumpStart) {
-							// Real-life physics yo
-							float float_sec = (time - timeJumpStart) / physicsSpeed;
-							if (float_sec != 0) {
-								float newPosY = ((-1f / 2f * gravity * float_sec * float_sec)
-										+ (motionY * float_sec) + (camera.position.y));
-								if (newPosY <= eyeHeight) {
-									jumping = false;
-									timeJumpStart = 0;
-									newPosY = eyeHeight;
-								}
-								camera.position.y = newPosY;
-							}
-						}
+			if (jumping && time != timeJumpStart) {
+				// Real-life physics yo
+				float float_sec = (time - timeJumpStart) / physicsSpeed;
+				if (float_sec != 0) {
+					float newPosY = ((-1f / 2f * gravity * float_sec * float_sec) + (motionY * float_sec) + (camera.position.y));
+					if (newPosY <= eyeHeight) {
+						jumping = false;
+						timeJumpStart = 0;
+						newPosY = eyeHeight;
+					}
+					camera.position.y = newPosY;
+				}
+			}
 
 			/* Commenting out because spam */
 
@@ -325,13 +322,6 @@ public class Blocker {
 		fps++;
 	}
 
-	private void startTimerHackThread()
-    {
-        ThreadClientSleep var1 = new ThreadClientSleep(this, "Timer hack thread");
-        var1.setDaemon(true);
-        var1.start();
-    }
-	
 	public static void main(String[] args) {
 		/* JFrame mainMenu = */new FrameTesting("Secret Title", 0, 275, 475);
 		/* JFrame console = */new FrameTesting("Console", 1, 600, 475);
