@@ -39,7 +39,7 @@ public class Blocker {
 	public Blocker(float x, float y, float z) {
 		position = new Vector3f(x, y, z);
 	}
-	
+
 	public Blocker() {
 
 	}
@@ -84,7 +84,7 @@ public class Blocker {
 		GL11.glTranslatef(position.x, -position.y, position.z);
 	}
 
-	private static boolean gameRunning = true;
+	public boolean gameRunning = true;
 	private static int targetWidth = 800;
 	private static int targetHeight = 600;
 
@@ -95,8 +95,7 @@ public class Blocker {
 			DisplayMode[] modes = Display.getAvailableDisplayModes();
 
 			for (int i = 0; i < modes.length; i++) {
-				if ((modes[i].getWidth() == targetWidth)
-						&& (modes[i].getHeight() == targetHeight)) {
+				if ((modes[i].getWidth() == targetWidth) && (modes[i].getHeight() == targetHeight)) {
 					chosenMode = modes[i];
 					break;
 				}
@@ -127,8 +126,7 @@ public class Blocker {
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
 
-		GLU.gluPerspective(45.0f, ((float) targetWidth)
-				/ ((float) targetHeight), 0.1f, 100.0f);
+		GLU.gluPerspective(45.0f, ((float) targetWidth) / ((float) targetHeight), 0.1f, 100.0f);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glLoadIdentity();
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
@@ -168,6 +166,8 @@ public class Blocker {
 
 	public void run() throws FontFormatException, IOException {
 		Blocker camera = new Blocker(0, eyeHeight, 0);
+		
+		startTimerHackThread();
 
 		float dx = 0.0f;
 		float dy = 0.0f;
@@ -179,7 +179,7 @@ public class Blocker {
 		long timeJumpStart = 0L;
 		float mouseSensitivity = 0.05f;
 		float movementSpeed = 5.0f;
-		float physicsSpeed = 300f;
+		float physicsSpeed = 300;
 		Mouse.setGrabbed(true);
 		beginFPSCount();
 		gameRunning = true;
@@ -224,32 +224,30 @@ public class Blocker {
 
 			// only jump once, unless you want weird flight
 			if (Keyboard.isKeyDown(Keyboard.KEY_SPACE) && !jumping) {
-				motionY = 8;
+				motionY = 8;// 8
 				timeJumpStart = time;
 				jumping = true;
 			}
 
 			// It'll kill it in the first sec. otherwise
-			if (jumping && time != timeJumpStart) {
-				// Real-life physics yo
-				float float_sec = (time - timeJumpStart) / physicsSpeed;
-				if (float_sec != 0) {
-					float newPosY = ((-1f / 2f * gravity * float_sec * float_sec)
-							+ (motionY * float_sec) + (camera.position.y));
-					if (newPosY <= eyeHeight) {
-						jumping = false;
-						timeJumpStart = 0;
-						newPosY = eyeHeight;
-					}
-					camera.position.y = newPosY;
-				}
-			}
+						if (jumping && time != timeJumpStart) {
+							// Real-life physics yo
+							float float_sec = (time - timeJumpStart) / physicsSpeed;
+							if (float_sec != 0) {
+								float newPosY = ((-1f / 2f * gravity * float_sec * float_sec)
+										+ (motionY * float_sec) + (camera.position.y));
+								if (newPosY <= eyeHeight) {
+									jumping = false;
+									timeJumpStart = 0;
+									newPosY = eyeHeight;
+								}
+								camera.position.y = newPosY;
+							}
+						}
 
 			/* Commenting out because spam */
 
-			System.out.println("X: " + Math.round(camera.position.x) + " Y: "
-					+ Math.round(camera.position.y) + " Z: "
-					+ Math.round(camera.position.z));
+			System.out.println("X: " + Math.round(camera.position.x) + " Y: " + Math.round(camera.position.y) + " Z: " + Math.round(camera.position.z));
 
 			// Moved render code, to help with flicker when jumping
 			render();
@@ -264,10 +262,7 @@ public class Blocker {
 			}
 			if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
 				Mouse.setGrabbed(false);
-				int result = JOptionPane.showConfirmDialog(null,
-						"Are you sure you want to quit?", "Close",
-						JOptionPane.OK_CANCEL_OPTION,
-						JOptionPane.QUESTION_MESSAGE);
+				int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to quit?", "Close", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 				if (result == JOptionPane.OK_OPTION) {
 					gameRunning = false;
 					continue;
@@ -330,6 +325,13 @@ public class Blocker {
 		fps++;
 	}
 
+	private void startTimerHackThread()
+    {
+        ThreadClientSleep var1 = new ThreadClientSleep(this, "Timer hack thread");
+        var1.setDaemon(true);
+        var1.start();
+    }
+	
 	public static void main(String[] args) {
 		/* JFrame mainMenu = */new FrameTesting("Secret Title", 0, 275, 475);
 		/* JFrame console = */new FrameTesting("Console", 1, 600, 475);
