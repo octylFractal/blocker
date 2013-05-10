@@ -180,8 +180,10 @@ public class Blocker {
 		float physicsSpeed = 300;
 		Mouse.setGrabbed(true);
 		beginFPSCount();
+		long loopTime = 0;
 		gameRunning = true;
 		while (gameRunning) {
+			loopTime = System.nanoTime();
 			update();
 			// Display.update goes AFTER all rendering
 			// Sync to limit FPS, and not burn all yer CPU's
@@ -259,6 +261,11 @@ public class Blocker {
 			}
 			if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
 				Mouse.setGrabbed(false);
+				try {
+					Thread.sleep(100);
+					Mouse.setGrabbed(true);
+				} catch (InterruptedException is) {
+				}
 				int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to quit?", "Close", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 				if (result == JOptionPane.OK_OPTION) {
 					gameRunning = false;
@@ -270,7 +277,7 @@ public class Blocker {
 				} catch (InterruptedException is) {
 				}
 			}
-
+			System.out.println(((System.nanoTime()-loopTime)/1000000)+"ms to run loop.");
 		}
 		try {
 			Display.releaseContext();
